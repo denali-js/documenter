@@ -1,0 +1,38 @@
+{
+  "name": "denali-documenter",
+  "version": "1.0.0",
+  "description": "Generate docs data from a Denali addon or app",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denali-js/documenter.git"
+  },
+  "author": "Dave Wasmer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/denali-js/documenter/issues"
+  },
+  "homepage": "https://github.com/denali-js/documenter#readme",
+  "devDependencies": {
+    "tslint": "^5.7.0",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
+    "@types/debug": "^0.0.30",
+    "@types/glob": "^5.0.32",
+    "@types/lodash": "^4.14.74",
+    "@types/node": "^8.0.26",
+    "@types/tmp": "^0.0.33",
+    "debug": "^3.0.1",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.4",
+    "require-dir": "^0.3.2",
+    "tmp": "^0.0.33",
+    "typedoc": "^0.8.0",
+    "walk-sync": "^0.3.2",
+    "yuidocjs": "^0.10.2"
+  }
+}
