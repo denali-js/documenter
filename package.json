@@ -1,7 +1,7 @@
 {
-  "name": "denali-documenter",
+  "name": "documenter",
   "version": "1.0.0",
-  "description": "Generate docs data from a Denali addon or app",
+  "description": "Generate docs data from a Javascript or Typescript project",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
