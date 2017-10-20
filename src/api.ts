@@ -1,6 +1,4 @@
 export default interface Project {
-  name: string;
-  version: string;
   packages: {
     [packageName: string]: Package;
   }

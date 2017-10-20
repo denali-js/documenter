@@ -5,6 +5,7 @@ import ui from '../ui';
 import * as createDebug from 'debug';
 import { DeclarationReflection, SignatureReflection } from "typedoc/dist/lib/models";
 import Extracter from '../extracter';
+import { sync as glob } from 'glob';
 
 const debug = createDebug('documenter:extracter:typescript');
 
@@ -15,11 +16,15 @@ export default function extractTypescript(extracter: Extracter): API {
 }
 
 function runTypedoc(rootDir: string, sourceDirs: string[]) {
-  debug(`Running Typedoc to extract inline documentation from ${ sourceDirs }`);
+  debug(`Running Typedoc to extract inline documentation from:\n  ${ sourceDirs.join('\n  ') }`);
+  let files = sourceDirs.reduce((files, dir) => {
+    let pattern = path.join(dir, '**', '*.ts');
+    return files.concat(glob(pattern));
+  }, <string[]>[]);
   let originalDir = process.cwd();
   process.chdir(rootDir);
   let app = new Application({ tsconfig: path.join(rootDir, 'tsconfig.json'), ignoreCompilerErrors: true }); 
-  let result = app.convert(sourceDirs.map((dir) => dir + '/index.ts'));
+  let result = app.convert(files);
   process.chdir(originalDir);
   return result;
 }
@@ -27,16 +32,14 @@ function runTypedoc(rootDir: string, sourceDirs: string[]) {
 function normalize(project: ProjectReflection, extracter: Extracter): API {
   debug(`Transforming Typedoc output into Documenter standard format`);
   let api: API = {
-    name: extracter.projectName,
-    version: extracter.projectVersion,
-    packages: {},
+    packages: {}
   };
   project.children.forEach((file) => {
     (file.children|| []).forEach((item) => {
       if (item.flags.isExported) {
         let packageName = getPackageName(item);
         if (!packageName) {
-          packageName = api.name;
+          packageName = extracter.projectName;
         }
         if (!api.packages[packageName]) {
           api.packages[packageName] = {

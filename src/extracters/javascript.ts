@@ -36,14 +36,12 @@ function runYuidoc(sourceDirs: string[]): Yuidoc {
 function normalize(yuidoc: Yuidoc, extracter: Extracter): API {
   debug(`Transforming Yuidoc output into Documenter standard format`);
   let api: API = {
-    name: extracter.projectName,
-    version: extracter.projectVersion,
     packages: {}
   };
   yuidoc.classitems.forEach((item) => {
     let packageName = item.module;
     if (!packageName) {
-      packageName = api.name
+      packageName = extracter.projectName;
     }
     if (!api.packages[packageName]) {
       api.packages[packageName] = {

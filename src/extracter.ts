@@ -7,10 +7,10 @@ import { sync as glob } from 'glob';
 import API from './api';
 import * as createDebug from 'debug';
 
-const debug = createDebug('documenter:documenter');
+const debug = createDebug('documenter:extracter');
 const extractersDir = path.join(__dirname, 'extracters');
 
-export interface ExtractorOptions {
+export interface ExtracterOptions {
   /**
    * The name of the project we are extracting docs from
    */
@@ -35,8 +35,13 @@ export interface ExtractorOptions {
 }
 
 export interface ExtractedDocs {
+  name: string;
+  version: string;
   pages: Dictionary<string>;
   api: API;
+  documenter: {
+    version: string;
+  }
 }
 
 export interface ExtracterMethod {
@@ -61,19 +66,19 @@ export default class Extracter {
   dir: string;
 
   /**
-   * The path to the directory containing all the Pages to build, relative to `dir`. Defaults to `docs`
+   * The absolute path to the directory containing all the Pages to build, relative to `dir`. Defaults to dir + `docs`
    */
   pagesDir: string;
 
   /**
-   * An array of paths to the directories containing the source code to extract API docs from.
-   * Defaults to `src`
+   * An array of ab solute paths to the directories containing the source code to extract API docs from.
+   * Defaults to dir + `src`
    */
   sourceDirs: string[];
 
   extracters = <Dictionary<{ default: ExtracterMethod }>>requireDir(extractersDir);
 
-  constructor(options: ExtractorOptions) {
+  constructor(options: ExtracterOptions) {
     defaults(options, this.defaultOptions(options.dir));
     debug(`Configuring for ${ options.dir }`);
     Object.assign(this, options);
@@ -83,15 +88,20 @@ export default class Extracter {
    * Extract docs from the directory
    */
   extract(): ExtractedDocs {
-    debug(`Extracting docs for ${ this.dir }`);
+    debug(`Extracting docs for ${ this.projectName }@${ this.projectVersion } from ${ this.dir }`);
     return {
+      name: this.projectName,
+      version: this.projectVersion,
       pages: this.extractPages(),
-      api: this.extractApi()
+      api: this.extractApi(),
+      documenter: {
+        version: '1.0'
+      }
     };
   }
 
   extractPages(): Dictionary<string> {
-    let dir = path.join(this.dir, this.pagesDir);
+    let dir = this.pagesDir;
     debug(`Extracting pages for ${ this.dir } from ${ dir }`);
     let files = walk(dir, { directories: false });
     return files.reduce((pages: Dictionary<string>, file: string) => {
