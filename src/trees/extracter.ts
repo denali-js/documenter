@@ -1,4 +1,4 @@
-import Plugin = require('broccoli-plugin');
+import Tree = require('broccoli-plugin');
 import Extracter from '../extracter';
 import { sync as readPkg } from 'read-pkg'
 import * as fs from 'fs';
@@ -20,7 +20,7 @@ export interface ExtracterTreeOptions {
   sourceDirs?: string[];
 }
 
-export default class ExtracterTree extends Plugin {
+export default class ExtracterTree extends Tree {
 
   options: {
     /**
@@ -43,7 +43,7 @@ export default class ExtracterTree extends Plugin {
     version: string;
   };
 
-  constructor(sourceTree: Plugin | string, options: ExtracterTreeOptions) {
+  constructor(sourceTree: Tree | string, options: ExtracterTreeOptions) {
     super([ sourceTree ]);
     options.sourceDirs = options.sourceDirs || [ 'src' ];
     options.pagesDir = options.pagesDir || 'docs';

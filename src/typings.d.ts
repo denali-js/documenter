@@ -3,12 +3,12 @@ declare module 'require-dir';
 declare module 'yuidocjs';
 declare module 'read-pkg';
 declare module 'broccoli-plugin' {
-  export = Plugin;
-  class Plugin {
+  export = Tree;
+  class Tree {
     inputPaths: string[];
     outputPath: string;
     cachePath: string[];
-    constructor(inputNodes: (string | Plugin)[], options?: {
+    constructor(inputNodes: (string | Tree)[], options?: {
       name: string,
       annotation: string,
       persistentOutput: boolean,

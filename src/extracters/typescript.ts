@@ -23,7 +23,7 @@ function runTypedoc(rootDir: string, sourceDirs: string[]) {
   }, <string[]>[]);
   let originalDir = process.cwd();
   process.chdir(rootDir);
-  let app = new Application({ tsconfig: path.join(rootDir, 'tsconfig.json'), ignoreCompilerErrors: true }); 
+  let app = new Application({ tsconfig: path.join(rootDir, 'tsconfig.json'), ignoreCompilerErrors: true });
   let result = app.convert(files);
   process.chdir(originalDir);
   return result;
@@ -66,7 +66,12 @@ function normalize(project: ProjectReflection, extracter: Extracter): API {
           pkg.classes[item.name] = normalizeClass(item);
 
         } else {
-          ui.warn(`${ item.sources[0].fileName } exported a ${ item.kindString }, and I don't know how to document that`);
+          let filename = item.sources[0].fileName;
+          // Chop of broccoli tmp directories if present
+          if (filename.startsWith('tmp')) {
+            filename = filename.split('/').slice(2).join('/');
+          }
+          ui.warn(`${ filename } exported a ${ item.kindString }, and I don't know how to document that`);
         }
 
       }
@@ -230,7 +235,7 @@ function displayTypeFrom(type: any): string {
 
   // Add any type args it might take, recursing into those types to render them properly
   if (type.typeArguments) {
-    displayType += '<' + type.typeArguments.map(displayTypeFrom).join(', ') + '>';    
+    displayType += '<' + type.typeArguments.map(displayTypeFrom).join(', ') + '>';
   }
 
   return displayType;
