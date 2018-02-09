@@ -24,9 +24,13 @@ export default class ExtracterTree extends Tree {
 
   options: {
     /**
-     * The root directory of the project to extract documentation from
+     * The name of the project we are extracting docs from
      */
-    dir: string;
+    projectName: string;
+    /**
+     * The version string of the project we are extracting docs from
+     */
+    projectVersion: string;
     /**
      * The path to the directory containing all the Pages to build, relative to `dir`. Defaults to `docs`
      */
@@ -48,7 +52,6 @@ export default class ExtracterTree extends Tree {
     options.sourceDirs = options.sourceDirs || [ 'src' ];
     options.pagesDir = options.pagesDir || 'docs';
     this.options = <any>options;
-    this.projectPkg = readPkg(options.dir);
   }
 
   build() {
@@ -59,11 +62,11 @@ export default class ExtracterTree extends Tree {
       fs.writeFileSync(path.join(this.outputPath, 'docs.json'), docs);
     } else {
       let extracter = new Extracter({
-        projectName: this.projectPkg.name,
-        projectVersion: this.projectPkg.version,
-        dir: this.options.dir,
-        sourceDirs: this.options.sourceDirs.map((dir) => path.join(input, dir)),
-        pagesDir: path.join(input, this.options.pagesDir)
+        dir: input,
+        projectName: this.options.projectName,
+        projectVersion: this.options.projectVersion,
+        sourceDirs: this.options.sourceDirs,
+        pagesDir: this.options.pagesDir
       });
       let docs = extracter.extract();
       fs.writeFileSync(path.join(this.outputPath, 'docs.json'), JSON.stringify(docs));
