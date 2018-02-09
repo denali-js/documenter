@@ -15,6 +15,9 @@
     "type": "git",
     "url": "https://github.com/denali-js/documenter.git"
   },
+  "files": [
+    "dist"
+  ],
   "author": "Dave Wasmer",
   "license": "MIT",
   "bugs": {
