@@ -1,4 +1,8 @@
 # Documenter
+[![Travis](https://img.shields.io/travis/davewasmer/find-plugins.svg?style=flat-square)](https://travis-ci.org/davewasmer/find-plugins)
+[![Dependencies](https://img.shields.io/david/davewasmer/find-plugins.svg?style=flat-square)](https://david-dm.org/davewasmer/find-plugins)
+[![npm downloads](https://img.shields.io/npm/davewasmer/find-plugins.svg?style=flat-square)](https://www.npmjs.com/package/find-plugins)
+![latest version](https://img.shields.io/npm/v/find-plugins.svg?style=flat-square)
 
 Generate documentation for your JavaScript or Typescript projects!
 
