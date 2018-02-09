@@ -2,13 +2,17 @@ import * as path from 'path';
 import { existsSync as exists, readFileSync as read } from 'fs';
 import { defaults, Dictionary } from 'lodash';
 import * as walk from 'walk-sync';
-import * as requireDir from 'require-dir';
 import { sync as glob } from 'glob';
 import API from './api';
+import TypescriptSourceExtracter from './source-extracters/typescript';
+import JavascriptSourceExtracter from './source-extracters/javascript';
 import * as createDebug from 'debug';
 
 const debug = createDebug('documenter:extracter');
-const extractersDir = path.join(__dirname, 'extracters');
+const sourceExtracters = {
+  'typescript': TypescriptSourceExtracter,
+  'javascript': JavascriptSourceExtracter
+};
 
 export interface ExtracterOptions {
   /**
@@ -76,12 +80,24 @@ export default class Extracter {
    */
   sourceDirs: string[];
 
-  extracters = <Dictionary<{ default: ExtracterMethod }>>requireDir(extractersDir);
-
   constructor(options: ExtracterOptions) {
     defaults(options, this.defaultOptions(options.dir));
     debug(`Configuring for ${ options.dir }`);
-    Object.assign(this, options);
+    this.dir = options.dir;
+    this.pagesDir = options.pagesDir || 'docs';
+    this.sourceDirs = options.sourceDirs || [ 'src' ];
+    this.projectName = options.projectName;
+    this.projectVersion = options.projectVersion;
+
+    if (!path.isAbsolute(this.pagesDir)) {
+      this.pagesDir = path.join(this.dir, this.pagesDir);
+    }
+    this.sourceDirs = this.sourceDirs.map((d) => {
+      if (!path.isAbsolute(d)) {
+        return path.join(this.dir, d);
+      }
+      return d;
+    });
   }
 
   /**
@@ -118,10 +134,11 @@ export default class Extracter {
     if (!sourceType) {
       throw new Error('Cannot extract API docs from this directory: unknown source type. Source must be Typescript or JavaScript');
     }
-    return this.extracters[sourceType].default.call(null, this);
+    let sourceExtracter = new sourceExtracters[sourceType](this);
+    return sourceExtracter.extract();
   }
 
-  detectSourceType(): string | null {
+  detectSourceType(): 'typescript' | 'javascript' | null {
     // Typescript
     if (exists(path.join(this.dir, 'tsconfig.json'))) {
       return 'typescript';
