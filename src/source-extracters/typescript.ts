@@ -11,9 +11,6 @@ const debug = createDebug('documenter:extracter:typescript');
 
 export default class TypescriptSourceExtracter extends SourceExtracter {
 
-  baseDir: string;
-  sourceDirs: string[];
-
   extract(): API {
     debug(`Extracting API from Typescript source`);
     let typedocOutput = this.runTypedoc();

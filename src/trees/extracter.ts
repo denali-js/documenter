@@ -1,6 +1,5 @@
 import Tree = require('broccoli-plugin');
 import Extracter from '../extracter';
-import { sync as readPkg } from 'read-pkg'
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -40,11 +39,6 @@ export default class ExtracterTree extends Tree {
      * Defaults to `src`
      */
     sourceDirs: string[];
-  };
-
-  projectPkg: {
-    name: string;
-    version: string;
   };
 
   constructor(sourceTree: Tree | string, options: ExtracterTreeOptions) {
