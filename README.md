@@ -2,7 +2,7 @@
 [![Travis](https://img.shields.io/travis/denali-js/documenter.svg?style=flat-square)](https://travis-ci.org/denali-js/documenter)
 [![Dependencies](https://img.shields.io/david/denali-js/documenter.svg?style=flat-square)](https://david-dm.org/denali-js/documenter)
 [![npm downloads](https://img.shields.io/npm/dm/@denali-js/documenter.svg?style=flat-square)](https://www.npmjs.com/package/@denali-js/documenter)
-![latest version](https://img.shields.io/npm/v/documenter.svg?style=flat-square)
+![latest version](https://img.shields.io/npm/v/@denali-js/documenter.svg?style=flat-square)
 
 Generate documentation for your JavaScript or Typescript projects!
 
