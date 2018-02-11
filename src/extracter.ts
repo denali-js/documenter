@@ -119,12 +119,15 @@ export default class Extracter {
   extractPages(): Dictionary<string> {
     let dir = this.pagesDir;
     debug(`Extracting pages for ${ this.dir } from ${ dir }`);
-    let files = walk(dir, { directories: false });
-    return files.reduce((pages: Dictionary<string>, file: string) => {
-      debug(`Found a page: ${ file }`);
-      pages[file] = read(path.join(dir, file), 'utf-8');
-      return pages;
-    }, <Dictionary<string>>{});
+    if (exists(dir)) {
+      let files = walk(dir, { directories: false });
+      return files.reduce((pages: Dictionary<string>, file: string) => {
+        debug(`Found a page: ${ file }`);
+        pages[file] = read(path.join(dir, file), 'utf-8');
+        return pages;
+      }, <Dictionary<string>>{});
+    }
+    return {};
   }
 
   extractApi(): API {
