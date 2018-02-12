@@ -98,6 +98,9 @@ export default class Extracter {
       }
       return d;
     });
+    if (!exists(this.dir)) {
+      throw new Error(`${ this.dir } does not exist, cannot extract documention from it`);
+    }
   }
 
   /**
@@ -143,7 +146,7 @@ export default class Extracter {
 
   detectSourceType(): 'typescript' | 'javascript' | null {
     // Typescript
-    if (exists(path.join(this.dir, 'tsconfig.json'))) {
+    if (glob(path.join(this.dir, `{${ this.sourceDirs.join(',') }}`, '**', '*.ts'))) {
       return 'typescript';
     // JavaScript
     } else if (glob(path.join(this.dir, `{${ this.sourceDirs.join(',') }}`, '**', '*.js'))) {

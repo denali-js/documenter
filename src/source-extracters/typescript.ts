@@ -21,7 +21,7 @@ export default class TypescriptSourceExtracter extends SourceExtracter {
   sourcePatterns() {
     return this.sourceDirs.reduce((files, dir) => {
       let pattern = path.join(dir, '**', '*.ts');
-      return files.concat(glob(pattern));
+      return files.concat(glob(pattern, { cwd: this.baseDir }));
     }, <string[]>[]);
   }
 
@@ -30,7 +30,7 @@ export default class TypescriptSourceExtracter extends SourceExtracter {
     let files = this.sourcePatterns();
     let originalDir = process.cwd();
     process.chdir(this.baseDir);
-    let app = new Application({ tsconfig: path.join(this.baseDir, 'tsconfig.json'), ignoreCompilerErrors: true });
+    let app = new Application({ ignoreCompilerErrors: true });
     let result = app.convert(files);
     process.chdir(originalDir);
     return result;
@@ -38,7 +38,7 @@ export default class TypescriptSourceExtracter extends SourceExtracter {
 
   normalize(project: ProjectReflection) {
     debug(`Transforming Typedoc output into Documenter standard format`);
-    project.children.forEach((file) => {
+    (project.children || []).forEach((file) => {
       (file.children|| []).forEach((item) => {
         if (item.flags.isExported) {
           let packageName = this.getPackageName(item);
@@ -244,7 +244,7 @@ export default class TypescriptSourceExtracter extends SourceExtracter {
 
     // Add any type args it might take, recursing into those types to render them properly
     if (type.typeArguments) {
-      displayType += '<' + type.typeArguments.map(this.displayTypeFrom).join(', ') + '>';
+      displayType += '<' + type.typeArguments.map(this.displayTypeFrom.bind(this)).join(', ') + '>';
     }
 
     return displayType;
