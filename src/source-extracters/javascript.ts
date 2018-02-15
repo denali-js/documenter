@@ -2,6 +2,7 @@ import * as Y from 'yuidocjs';
 import { forEach } from 'lodash';
 import { dirSync as tmp } from 'tmp';
 import { inspect } from 'util';
+import { existsSync as exists } from 'fs';
 import API, { FreeFunction, Package, Class, Method, Property } from '../api';
 import ui from '../ui';
 import * as createDebug from 'debug';
@@ -23,10 +24,11 @@ export default class JavascriptSourceExtracter extends SourceExtracter {
   runYuidoc(): YUIDoc.Project {
     debug(`Running Yuidoc to extract inline documentation`);
     let outDir = tmp({ prefix: 'yuidoc-output-', unsafeCleanup: true }).name;
+    let paths = this.sourceDirs.filter(exists);
     let config = {
       quiet: true,
       outdir: outDir,
-      paths: this.sourceDirs,
+      paths,
       parseOnly: true
     };
     let yuidoc = new Y.YUIDoc(config);

@@ -136,7 +136,6 @@ export default class Extracter {
   extractApi(): API {
     debug(`Extracting API for ${ this.dir }`);
     let sourceType = this.detectSourceType();
-    debug(`Source type for this project seems to be ${ sourceType }`);
     if (!sourceType) {
       throw new Error('Cannot extract API docs from this directory: unknown source type. Source must be Typescript or JavaScript');
     }
@@ -145,11 +144,21 @@ export default class Extracter {
   }
 
   detectSourceType(): 'typescript' | 'javascript' | null {
+    debug(`Checking source type for project located in ${ this.dir }`);
+    let basePattern: string;
+    if (this.sourceDirs.length > 1) {
+      basePattern = `{${ this.sourceDirs.join(',') }}`;
+    } else {
+      basePattern = this.sourceDirs[0];
+    }
+    basePattern = path.join(basePattern, '**', '*');
     // Typescript
-    if (glob(path.join(this.dir, `{${ this.sourceDirs.join(',') }}`, '**', '*.ts'))) {
+    if (glob(`${ basePattern }.ts`).length > 0) {
+      debug(`Found .ts files in ${ this.dir }, assuming Typescript`);
       return 'typescript';
     // JavaScript
-    } else if (glob(path.join(this.dir, `{${ this.sourceDirs.join(',') }}`, '**', '*.js'))) {
+    } else if (glob(`${ basePattern }.js`).length > 0) {
+      debug(`Found no .ts files ${ this.dir }, assuming JavaScript`);
       return 'javascript';
     }
     return null;

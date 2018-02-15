@@ -7,7 +7,7 @@ test('javascript projects', async (t) => {
   let extracter = new Extracter({
     dir: path.join(__dirname, 'fixtures', 'javascript-project'),
     pagesDir: 'guides',
-    sourceDirs: [ 'src' ],
+    sourceDirs: [ 'src', 'non-existent-folder' ],
     projectName: 'javascript-project',
     projectVersion: '1.0.0'
   });

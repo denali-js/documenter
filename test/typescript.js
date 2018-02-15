@@ -7,7 +7,7 @@ test('typescript projects', async (t) => {
   let extracter = new Extracter({
     dir: path.join(__dirname, 'fixtures', 'typescript-project'),
     pagesDir: 'guides',
-    sourceDirs: [ 'src' ],
+    sourceDirs: [ 'src', 'non-existent-folder' ],
     projectName: 'typescript-project',
     projectVersion: '1.0.0'
   });
