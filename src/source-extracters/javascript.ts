@@ -1,4 +1,3 @@
-import * as Y from 'yuidocjs';
 import { forEach } from 'lodash';
 import { dirSync as tmp } from 'tmp';
 import { inspect } from 'util';
@@ -31,8 +30,15 @@ export default class JavascriptSourceExtracter extends SourceExtracter {
       paths,
       parseOnly: true
     };
+    // Temporarily replace argv so YUIDoc doesn't try to print debug output
+    // when --debug is passed to the command line for Denali
+    let originalArgv = process.argv;
+    process.argv = [];
+    let Y = require('yuidocjs');
     let yuidoc = new Y.YUIDoc(config);
-    return yuidoc.run();
+    let results = yuidoc.run();
+    process.argv = originalArgv;
+    return results;
   }
 
   normalize(yuidoc: YUIDoc.Project) {
