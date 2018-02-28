@@ -29,6 +29,11 @@ jobs:
       - checkout
       - restore_cache:
           key: dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-{{ checksum "yarn.lock" }}
       - run: npm run semantic-release || true
 
 workflows:
