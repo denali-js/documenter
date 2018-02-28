@@ -25,6 +25,8 @@ jobs:
     requires:
       - test-node-8
       - test-node-9
+    docker:
+      - image: circleci/node:9.5.0
     steps:
       - run: npm run semantic-release || true
 
