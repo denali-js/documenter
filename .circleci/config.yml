@@ -1,6 +1,7 @@
 default-test-config: &default-test-config
   working_directory: ~/repo
-  steps: - checkout
+  steps:
+    - checkout
     - restore_cache:
         key: dependencies-{{ checksum "yarn.lock" }}
     - run: yarn install
@@ -8,11 +9,6 @@ default-test-config: &default-test-config
         paths:
           - node_modules
         key: dependencies-{{ checksum "yarn.lock" }}
-    - run:
-        name: Configure git user info
-        command: |
-          git config --global user.email "test@denalijs.org"
-          git config --global user.name "Denali"
     - run: yarn test
 
 version: 2
