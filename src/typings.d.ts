@@ -2,6 +2,7 @@ declare module 'walk-sync';
 declare module 'require-dir';
 declare module 'yuidocjs';
 declare module 'read-pkg';
+declare module 'front-matter';
 declare module 'broccoli-plugin' {
   export = Tree;
   class Tree {

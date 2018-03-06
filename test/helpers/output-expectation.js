@@ -7,7 +7,13 @@ export default function(extension) {
     name: `${ lang }-project`,
     version: '1.0.0',
     pages: {
-      'introduction.md': `# Introduction to ${ upperFirst(lang) } Project`
+      'introduction': {
+        title: `A ${ isTypescript ? 'T' : 'J' }S Project Introduction`,
+        contents: `# Introduction to ${ upperFirst(lang) } Project`
+      },
+      'nested/page': {
+        contents: "# I'm nested!"
+      }
     },
     api: {
       packages: {

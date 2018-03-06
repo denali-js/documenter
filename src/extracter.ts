@@ -1,12 +1,13 @@
-import * as path from 'path';
+import path from 'path';
 import { existsSync as exists, readFileSync as read } from 'fs';
 import { defaults, Dictionary } from 'lodash';
-import * as walk from 'walk-sync';
+import walk from 'walk-sync';
 import { sync as glob } from 'glob';
+import frontmatter from 'front-matter';
 import API from './api';
 import TypescriptSourceExtracter from './source-extracters/typescript';
 import JavascriptSourceExtracter from './source-extracters/javascript';
-import * as createDebug from 'debug';
+import createDebug from 'debug';
 
 const debug = createDebug('documenter:extracter');
 const sourceExtracters = {
@@ -126,7 +127,12 @@ export default class Extracter {
       let files = walk(dir, { directories: false });
       return files.reduce((pages: Dictionary<string>, file: string) => {
         debug(`Found a page: ${ file }`);
-        pages[file] = read(path.join(dir, file), 'utf-8');
+        let rawContents = read(path.join(dir, file), 'utf-8');
+        let parsedContents = frontmatter(rawContents);
+        let filenameWithoutExtensions = path.join(path.dirname(file), path.basename(file, path.extname(file)));
+        pages[filenameWithoutExtensions] = Object.assign(parsedContents.attributes, {
+          contents: parsedContents.body
+        });
         return pages;
       }, <Dictionary<string>>{});
     }

@@ -1,7 +1,7 @@
 import Tree = require('broccoli-plugin');
 import Extracter from '../extracter';
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 export interface ExtracterTreeOptions {
   /**

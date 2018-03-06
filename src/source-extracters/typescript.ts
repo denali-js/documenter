@@ -1,8 +1,8 @@
-import * as path from 'path';
+import path from 'path';
 import { Application, ProjectReflection } from 'typedoc';
 import API, { Class, Method, Property, Tag, MethodSignature, Interface } from '../api';
 import ui from '../ui';
-import * as createDebug from 'debug';
+import createDebug from 'debug';
 import { DeclarationReflection, SignatureReflection, Comment } from "typedoc/dist/lib/models";
 import { sync as glob } from 'glob';
 import SourceExtracter from "./base";

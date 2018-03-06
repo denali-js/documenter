@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import { existsSync as exists } from 'fs';
 import API, { FreeFunction, Package, Class, Method, Property } from '../api';
 import ui from '../ui';
-import * as createDebug from 'debug';
+import createDebug from 'debug';
 import SourceExtracter from "./base";
 
 process.removeAllListeners('uncaughtException');
