@@ -6,6 +6,7 @@ import createDebug from 'debug';
 import { DeclarationReflection, SignatureReflection, Comment } from "typedoc/dist/lib/models";
 import { sync as glob } from 'glob';
 import SourceExtracter from "./base";
+import { CallbackLogger } from 'typedoc/dist/lib/utils';
 
 const debug = createDebug('documenter:extracter:typescript');
 
@@ -30,7 +31,14 @@ export default class TypescriptSourceExtracter extends SourceExtracter {
     let files = this.sourcePatterns();
     let originalDir = process.cwd();
     process.chdir(this.baseDir);
-    let app = new Application({ ignoreCompilerErrors: true });
+    let tsconfig = {};
+    try {
+      tsconfig = require(path.join(this.baseDir, 'tsconfig.json')).compilerOptions;
+    } catch (e) { /* do nothing */ }
+    let app = new Application(Object.assign(tsconfig, {
+      ignoreCompilerErrors: true
+    }));
+    app.logger = new CallbackLogger(debug);
     let result = app.convert(files);
     process.chdir(originalDir);
     return result;
